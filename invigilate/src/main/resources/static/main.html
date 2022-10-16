@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监考信息查询系统</title>
+    <script src="./plugins/vue/vue.js"></script>
+    <link rel="stylesheet" href="./plugins/element-ui/index.css">
+    <script src="./plugins/element-ui/index.js"></script>
+    <script src="./plugins/axios/axios.min.js"></script>
+    <script>Vue.config.productionTip= false </script>
+
+
+</head>
+<body>
+<div id="app">
+    <p style="text-align: center" ><strong>监考信息查询系统</strong></p>
+
+   <el-input
+            placeholder="请输入姓名"
+            v-model="input"
+            clearable
+            @keyup.enter.native="selectInfo"
+            style="width: auto "
+            >
+    </el-input>
+    <el-button style="padding-right:20px ;"  slot="suffix" type="primary" icon="el-icon-search" @click="selectInfo" >查询</el-button>
+    <el-descriptions title="" direction="horizontal" :column="1" border size="medium">
+        <el-descriptions-item >
+            <template slot="label">
+                <i class="el-icon-user" ></i>
+                姓名
+            </template>
+            {{information.name}}
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+            <template slot="label">
+                <i class="el-icon-location-outline"></i>
+                监考培训地点
+            </template>
+            {{information.training_place}}
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+            <template slot="label">
+                <i class="el-icon-location-outline"></i>
+                英语三级监考地点
+            </template>
+            {{information.level_III_place}}
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+            <template slot="label">
+                <i class="el-icon-location-outline"></i>
+                英语四级监考地点
+            </template>
+            {{information.level_IV_place}}
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+            <template slot="label">
+                <i class="el-icon-location-outline"></i>
+                英语六级监考地点
+            </template>
+            {{information.level_VI_place}}
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+        <template slot="label">
+            <i class="el-icon-office-building"></i>
+            流动监考地点
+        </template>
+            <p v-for="sit in information.flow_place">
+                {{sit}}
+            </p>
+        </el-descriptions-item>
+
+        <el-descriptions-item>
+        <template slot="label">
+            <i class="el-icon-tickets"></i>
+            流动监考范围
+        </template>
+            {{information.flow_range}}
+    </el-descriptions-item>
+    </el-descriptions>
+
+
+
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data:{
+                input: '',
+                information: {
+                    name: "",
+                    training_place: "",
+                    level_III_place: "",
+                    level_IV_place: "",
+                    level_VI_place: "",
+                    flow_place: [],
+                    flow_range: ""
+                }
+            },
+        created(){
+        },
+        methods:{
+            selectInfo(){
+                axios.get("http://43.138.27.94:8082/edu/teacher/"+this.input)
+                    .then(res=>{
+                         if(res.data.code!=200){
+                             this.$message('请检查输入姓名是否为正确！');
+                         }else {
+                             this.information=res.data.data;
+                             console.log(this.information.flow_place)
+                         }
+                    }).catch(res=>{
+                        window.location.reload();
+                    })
+            },
+        }
+    })
+</script>
+
+</body>
+</html>
+
+<!--name: "张三",-->
+<!--training_place: c,-->
+<!--level_III_place:"厚德楼A108",-->
+<!--level_IV_place: "厚德楼A108",-->
+<!--level_VI_place: "厚德楼A108",-->
+<!--flow_place:     "厚德楼A108",-->
+<!--flow_range:     "1-10号考场"-->

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lu.edu.mapper.ExamTowerMapper">
+
+    <select id="listTower" resultType="com.lu.edu.entity.ExamTower">
+        SELECT tower.* FROM tower_teacher_relation t LEFT JOIN exam_teacher te on t.teacher_id=te.id
+                                                     LEFT JOIN exam_tower tower on t.tower_id=tower.id WHERE te.flow_teacher=#{name}
+    </select>
+</mapper>
